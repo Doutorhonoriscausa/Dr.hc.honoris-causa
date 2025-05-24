@@ -1,0 +1,101 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Syrlene Moreira - DR.HC Honoris Causa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Navbar -->
+  <nav class="bg-green-800 text-white p-4 sticky top-0 z-10">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold">Syrlene Moreira - DR.HC</h1>
+      <ul class="flex space-x-4">
+        <li><a href="#inicio" class="hover:underline">Início</a></li>
+        <li><a href="#sobre" class="hover:underline">Sobre o Título</a></li>
+        <li><a href="#processo" class="hover:underline">Processo Seletivo</a></li>
+        <li><a href="#depoimentos" class="hover:underline">Depoimentos</a></li>
+        <li><a href="#contato" class="hover:underline">Contato</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="inicio" class="bg-gradient-to-r from-green-700 to-brown-900 text-white py-20">
+    <div class="container mx-auto text-center">
+      <h2 class="text-4xl font-bold mb-4">Syrlene Moreira - DR.HC: Honrando a Sabedoria Ancestral</h2>
+      <p class="text-lg mb-6 max-w-2xl mx-auto">Celebre suas contribuições extraordinárias com o título honorífico mais prestigiado, inspirado na sabedoria indígena e no impacto transformador na sociedade.</p>
+      <a href="#processo" class="bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600">Conheça o Processo</a>
+    </div>
+  </section>
+
+  <!-- Sobre o Título Section -->
+  <section id="sobre" class="py-20">
+    <div class="container mx-auto text-center">
+      <h3 class="text-3xl font-bold mb-6">O Que é o Título DR.HC (Honoris Causa)?</h3>
+      <p class="text-lg max-w-3xl mx-auto mb-6">O título de DR.HC (Honoris Causa), do latim "por causa da honra", é uma distinção concedida a indivíduos que se destacam por suas contribuições notáveis à sociedade, seja na ciência, cultura, educação ou outras áreas. É um reconhecimento de excelência e impacto, sem a necessidade de formação acadêmica formal.</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <h4 class="text-xl font-bold mb-2">Prestígio</h4>
+          <p>Um símbolo de reconhecimento internacional pela sua trajetória.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <h4 class="text-xl font-bold mb-2">Exclusividade</h4>
+          <p>Concedido apenas a personalidades de impacto singular.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <h4 class="text-xl font-bold mb-2">Legado</h4>
+          <p>Imortalize suas conquistas em uma cerimônia memorável.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Processo Seletivo Section -->
+  <section id="processo" class="bg-gray-200 py-20">
+    <div class="container mx-auto text-center">
+      <h3 class="text-3xl font-bold mb-6">Como Obter o Título</h3>
+      <p class="text-lg max-w-2xl mx-auto mb-6">O processo seletivo é rigoroso e avalia suas contribuições à sociedade. Envie sua biografia e participe de uma análise conduzida por nosso conselho.</p>
+      <ol class="text-left max-w-xl mx-auto list-decimal list-inside space-y-4">
+        <li>Preencha o formulário de inscrição com seus dados.</li>
+        <li>Envie uma biografia destacando
